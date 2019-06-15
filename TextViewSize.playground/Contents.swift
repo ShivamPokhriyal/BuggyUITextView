@@ -34,7 +34,6 @@ class Demo: UIView {
         let label = UITextView(frame: .zero)
         label.isUserInteractionEnabled = true
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = Demo.font
         label.backgroundColor = .clear
         label.textContainerInset = .zero
         label.textContainer.lineFragmentPadding = 0
@@ -58,8 +57,8 @@ class Demo: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setText(_ text: String) {
-        messageLabel.text = text
+    func setText(_ attributedString: NSAttributedString) {
+        messageLabel.attributedText = attributedString
     }
 
     private func setupConstraints() {
@@ -80,17 +79,17 @@ class Demo: UIView {
 
 let str = "kahsjdajsdjasdjahdjhsa jgdhsagdgagdgagdhaghdgahgdhgagdgadsaydahvdhvadvadvsavdavsdvavsdavvdvsadvsajhhshshshshshhshshsshsshhshshshsshhshshshshhshshshshhshhsahshhsahashhhsaasa22kahsjdajsdjasdjahdjhsa jgdhsagdgagdgagdhaghdgahgdhgagdgadsaydahvdhvadvadvsavdavsdvavsdavvdvsadvsajhhshshshshshhshshsshsshhshshshsshhshshshshhshshshshhshhsahshhsahashhhsaasa223"
 
+let attributedString = NSAttributedString(string: str, attributes: [.font : Demo.font])
+
 let width: CGFloat = 237
 
 let constraintRect = CGSize(width: width, height: .greatestFiniteMagnitude)
-let boundingBox = str.boundingRect(with: constraintRect,
-                                   options: .usesLineFragmentOrigin,
-                                   attributes: [.font: Demo.font],
-                                   context: nil)
+
+let boundingBox = attributedString.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, context: nil)
 
 let height = ceil(boundingBox.height)
 
 let buggyView = Demo(frame: CGRect(x: 0, y: 0, width: width, height: height))
-buggyView.setText(str)
+buggyView.setText(attributedString)
 
 PlaygroundPage.current.liveView = buggyView
